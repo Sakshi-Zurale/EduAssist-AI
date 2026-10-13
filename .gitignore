@@ -1,0 +1,27 @@
+﻿# Python environment and cache
+.venv/
+**/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
+
+# Frontend dependencies and builds
+node_modules/
+dist/
+build/
+
+# Local editor settings
+.vscode/
+
+# Local datasets and student IDs
+data/
+Dataset/
+student_id.txt
+
+# Logs
+*.log
