@@ -267,4 +267,201 @@ Install or prepare:
 - Python 3.11
 - Node.js and npm
 - Git
-- AWS account with an S3 bucket
+- AWS account with an S3 bucket and appropriate permissions
+- Ollama, if using the local LLM and RAG/chat pipeline
+- The required datasets and trained model files
+
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/Sakshi-Zurale/EduAssist-AI.git
+cd EduAssist-AI
+```
+
+### 3. Set up the Python backend
+
+From the project root, create and activate a virtual environment:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Install backend dependencies:
+
+```powershell
+pip install -r backend/requirements.txt
+```
+
+If a required Python package is missing, install it in the active environment according to the project's dependency configuration.
+
+### 4. Configure AWS S3
+
+Configure AWS credentials securely using an AWS profile, environment variables, or an appropriate IAM role.
+
+For local development, one option is:
+
+```powershell
+aws configure
+```
+
+Install the AWS CLI separately if you want to use that command. The application itself uses Boto3.
+
+Verify that the backend configuration matches your bucket and AWS region. The current project configuration uses:
+
+```text
+Bucket: eduassist-ai
+Region: ap-southeast-2
+```
+
+Ensure the configured AWS identity has permission to upload objects to the required bucket and prefix.
+
+**Security:** Never commit AWS access keys, secret keys, `.env` files containing credentials, or other secrets to GitHub. Keep the bucket private unless you have a specific reason to expose its contents.
+
+### 5. Start the backend
+
+From the repository root:
+
+```powershell
+python -m uvicorn backend.main:app --reload
+```
+
+The API should be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+Interactive API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+### 6. Start the frontend
+
+Open a second terminal:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite, commonly:
+
+```text
+http://localhost:5173
+```
+
+### 7. Run the AI assistant
+
+If the chat workflow uses Ollama, ensure Ollama is installed, the configured model is available, and the local Ollama service is running. The current model configuration is:
+
+```text
+llama3.2:3b
+```
+
+The trained model files, dataset paths, and any retrieval resources must also be available in the locations expected by the backend.
+
+---
+
+## 📄 Generate a Student Report
+
+1. Open the EduAssist AI dashboard.
+2. Enter a valid student ID.
+3. Load the student profile.
+4. Select **Generate Report & Save to S3**.
+5. Wait for the backend to generate the PDF and upload it.
+6. Check the success message for the returned S3 object key.
+7. Verify the stored object in the configured S3 bucket.
+
+The backend report endpoint can also be tested through Swagger:
+
+```http
+POST /student/11391/report
+```
+
+Replace `11391` with another valid student ID.
+
+Example object-key pattern:
+
+```text
+reports/student_11391_<timestamp>.pdf
+```
+
+Each report request creates a new timestamped object key, allowing reports for the same student to be stored separately.
+
+---
+
+## 🔐 Security & Data Handling
+
+- Keep AWS credentials outside source control.
+- Use least-privilege IAM permissions for report uploads.
+- Keep student reports in a private S3 bucket.
+- Avoid exposing student-identifiable information in public logs or screenshots.
+- Use only datasets and student information that you are authorized to process.
+- Do not place credentials or sensitive student data in GitHub issues or commits.
+
+---
+
+## 🎓 Academic Relevance
+
+This project demonstrates concepts from two complementary subjects.
+
+### Subject 1 — Deep Learning
+
+- AI-powered conversational interfaces
+- Language models and NLP
+- Embedding-based semantic retrieval
+- Retrieval-Augmented Generation (RAG)
+- Machine-learning-based performance prediction
+- Student-risk classification and data-driven insights
+
+### Subject 2 — Cloud Computing
+
+- Cloud object storage with Amazon S3
+- AWS SDK integration using Boto3
+- API-driven cloud operations
+- Programmatic PDF report uploads
+- Cloud resource permissions and credential management
+- Integration between a local application and a cloud service
+
+**Technical distinction:** The current performance-prediction and risk-classification models are Gradient Boosting and Random Forest models, respectively. They are machine-learning models rather than deep neural networks. The LLM and embedding-based components provide the project's language-model and retrieval-based AI functionality.
+
+---
+
+## 🔮 Future Enhancements
+
+Potential future improvements include:
+
+- Visual performance trends and historical comparisons.
+- More comprehensive study-plan personalization.
+- Additional evaluation of model performance and prediction quality.
+- Improved report history and report-download workflows.
+- Secure authentication and role-based access.
+- Cloud deployment of the backend and frontend.
+- Expanded monitoring, logging, and cloud-cost controls.
+
+These are proposed enhancements, not claims that every feature is already implemented.
+
+---
+
+## 👩‍💻 Author
+
+**Sakshi Zurale**
+
+B.Tech — Electronics & Computer Engineering
+
+Interested in Artificial Intelligence, Machine Learning, Software Engineering, and Cloud Computing.
+
+- **GitHub:** [Sakshi-Zurale](https://github.com/Sakshi-Zurale)
+- **Project Repository:** [EduAssist-AI](https://github.com/Sakshi-Zurale/EduAssist-AI)
+
+---
+
+<p align="center">
+  <b>EduAssist AI — Smarter Insights. Better Learning. Connected Cloud.</b>
+  <br/>
+  Built as an academic project exploring AI-powered education and cloud computing.
+</p>
